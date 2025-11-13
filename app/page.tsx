@@ -11,6 +11,7 @@ export default function Home() {
   const [title, setTitle] = useState('能量晨读');
   const [date, setDate] = useState('');
   const [qrCode, setQrCode] = useState<string | null>(null);
+  const [showQrCode, setShowQrCode] = useState(true);
   const [backgroundUrl, setBackgroundUrl] = useState<string | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -140,6 +141,21 @@ export default function Home() {
               disabled={isGenerating}
             />
 
+            {/* 二维码显示开关 */}
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                id="showQrCode"
+                checked={showQrCode}
+                onChange={(e) => setShowQrCode(e.target.checked)}
+                disabled={isGenerating}
+                className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50"
+              />
+              <label htmlFor="showQrCode" className="text-gray-700 font-medium cursor-pointer">
+                在图片上显示二维码
+              </label>
+            </div>
+
             <button
               onClick={handleGenerate}
               disabled={isGenerating || !text.trim()}
@@ -183,6 +199,7 @@ export default function Home() {
             <li>（可选）自定义日期，不填写则使用当天日期</li>
             <li>在文字输入框中输入今日的晨读内容（必填）</li>
             <li>（可选）上传你的二维码图片，或使用默认二维码</li>
+            <li>（可选）勾选是否在图片上显示二维码</li>
             <li>点击"生成图片"按钮，系统会自动生成与内容相配的背景图</li>
             <li>生成完成后，预览图片并点击"下载图片"保存到本地</li>
             <li>分享到朋友圈，传递正能量！</li>
@@ -198,6 +215,7 @@ export default function Home() {
           date={date || getDefaultDate()}
           text={text}
           qrCodeImage={qrCode}
+          showQrCode={showQrCode}
           onGenerated={handleImageGenerated}
         />
       )}

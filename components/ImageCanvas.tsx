@@ -8,10 +8,11 @@ interface ImageCanvasProps {
   date: string;
   text: string;
   qrCodeImage: string | null;
+  showQrCode: boolean;
   onGenerated: (imageData: string) => void;
 }
 
-export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeImage, onGenerated }: ImageCanvasProps) {
+export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeImage, showQrCode, onGenerated }: ImageCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [imagesLoaded, setImagesLoaded] = useState(0);
   const totalImages = 2; // 背景图 + 二维码
@@ -146,51 +147,53 @@ export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeIm
           style={{
             position: 'absolute',
             top: '320px',
-            left: '80px',
-            right: '80px',
+            left: '120px',
+            right: '120px',
             color: '#FFFFFF',
-            fontSize: '48px',
-            lineHeight: '1.5',
-            textAlign: 'center',
+            fontSize: '44px',
+            lineHeight: '1.6',
+            textAlign: 'left',
             textShadow: '2px 2px 8px rgba(0,0,0,0.5)',
             fontFamily: 'Arial, "PingFang SC", "Microsoft YaHei", sans-serif',
           }}
         >
           {lines.map((line, index) => (
-            <div key={index} style={{ marginBottom: '16px' }}>
+            <div key={index} style={{ marginBottom: '20px', textIndent: '88px' }}>
               {line}
             </div>
           ))}
         </div>
 
         {/* 二维码 */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '60px',
-            right: '60px',
-            width: '240px',
-            height: '240px',
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            borderRadius: '15px',
-            padding: '20px',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <img
-            src={qrCodeImage || '/default-qrcode.svg'}
-            alt="QR Code"
-            style={{ width: '180px', height: '180px', objectFit: 'contain' }}
-            onLoad={() => handleImageLoad('QR Code')}
-            onError={(e) => {
-              console.error('QR code image load error:', e);
-              handleImageLoad('QR Code (error)');
+        {showQrCode && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '60px',
+              right: '60px',
+              width: '240px',
+              height: '240px',
+              backgroundColor: 'rgba(255,255,255,0.95)',
+              borderRadius: '15px',
+              padding: '20px',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-          />
-        </div>
+          >
+            <img
+              src={qrCodeImage || '/default-qrcode.svg'}
+              alt="QR Code"
+              style={{ width: '180px', height: '180px', objectFit: 'contain' }}
+              onLoad={() => handleImageLoad('QR Code')}
+              onError={(e) => {
+                console.error('QR code image load error:', e);
+                handleImageLoad('QR Code (error)');
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
