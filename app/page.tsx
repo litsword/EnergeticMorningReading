@@ -8,11 +8,22 @@ import ImageCanvas from '@/components/ImageCanvas';
 
 export default function Home() {
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('能量晨读');
+  const [date, setDate] = useState('');
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [backgroundUrl, setBackgroundUrl] = useState<string | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // 获取默认日期（格式：YYYY.MM.DD）
+  const getDefaultDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+  };
 
   const handleGenerate = async () => {
     if (!text.trim()) {
@@ -85,6 +96,38 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* 左侧：输入区域 */}
           <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+            {/* 标题输入 */}
+            <div className="w-full">
+              <label className="block text-lg font-semibold mb-3 text-gray-700">
+                图片标题
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                disabled={isGenerating}
+                placeholder="能量晨读"
+                className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-800"
+              />
+              <p className="mt-1 text-sm text-gray-500">默认：能量晨读</p>
+            </div>
+
+            {/* 日期输入 */}
+            <div className="w-full">
+              <label className="block text-lg font-semibold mb-3 text-gray-700">
+                日期
+              </label>
+              <input
+                type="text"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                disabled={isGenerating}
+                placeholder={getDefaultDate()}
+                className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-800"
+              />
+              <p className="mt-1 text-sm text-gray-500">默认：{getDefaultDate()}（格式：YYYY.MM.DD）</p>
+            </div>
+
             <TextInput
               value={text}
               onChange={setText}
@@ -136,7 +179,9 @@ export default function Home() {
         <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
           <h3 className="text-lg font-semibold mb-3 text-gray-800">使用说明</h3>
           <ol className="list-decimal list-inside space-y-2 text-gray-600">
-            <li>在文字输入框中输入今日的晨读内容</li>
+            <li>（可选）自定义图片标题，不填写则使用默认"能量晨读"</li>
+            <li>（可选）自定义日期，不填写则使用当天日期</li>
+            <li>在文字输入框中输入今日的晨读内容（必填）</li>
             <li>（可选）上传你的二维码图片，或使用默认二维码</li>
             <li>点击"生成图片"按钮，系统会自动生成与内容相配的背景图</li>
             <li>生成完成后，预览图片并点击"下载图片"保存到本地</li>
@@ -149,6 +194,8 @@ export default function Home() {
       {backgroundUrl && (
         <ImageCanvas
           backgroundUrl={backgroundUrl}
+          title={title || '能量晨读'}
+          date={date || getDefaultDate()}
           text={text}
           qrCodeImage={qrCode}
           onGenerated={handleImageGenerated}

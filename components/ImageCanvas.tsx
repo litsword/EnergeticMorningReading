@@ -4,12 +4,14 @@ import { useRef, useEffect, useState } from 'react';
 
 interface ImageCanvasProps {
   backgroundUrl: string;
+  title: string;
+  date: string;
   text: string;
   qrCodeImage: string | null;
   onGenerated: (imageData: string) => void;
 }
 
-export default function ImageCanvas({ backgroundUrl, text, qrCodeImage, onGenerated }: ImageCanvasProps) {
+export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeImage, onGenerated }: ImageCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [imagesLoaded, setImagesLoaded] = useState(0);
   const totalImages = 2; // 背景图 + 二维码
@@ -68,13 +70,6 @@ export default function ImageCanvas({ backgroundUrl, text, qrCodeImage, onGenera
   // 分割文字为多行
   const lines = text.split('\n').filter(line => line.trim());
 
-  // 获取当天日期
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const dateString = `${year}.${month}.${day}`;
-
   return (
     <div style={{ position: 'fixed', left: '-9999px', top: 0 }}>
       <div
@@ -125,7 +120,7 @@ export default function ImageCanvas({ backgroundUrl, text, qrCodeImage, onGenera
             fontFamily: 'Arial, "PingFang SC", "Microsoft YaHei", sans-serif',
           }}
         >
-          能量晨读
+          {title}
         </div>
 
         {/* 日期 */}
@@ -143,7 +138,7 @@ export default function ImageCanvas({ backgroundUrl, text, qrCodeImage, onGenera
             opacity: 0.9,
           }}
         >
-          {dateString}
+          {date}
         </div>
 
         {/* 文字内容 */}
