@@ -3,11 +3,5 @@
   "outputDirectory": ".next",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "framework": "nextjs",
-  "env": {
-    "ARK_API_KEY": {
-      "type": "secret",
-      "value": "@ark_api_key"
-    }
-  }
+  "framework": "nextjs"
 }
