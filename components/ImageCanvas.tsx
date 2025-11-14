@@ -189,7 +189,7 @@ export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeIm
             }}
           >
             <img
-              src={qrCodeImage || '/default-qrcode.svg'}
+              src={qrCodeImage || '/default-qrcode.jpg'}
               alt="QR Code"
               style={{ width: '180px', height: '180px', objectFit: 'contain' }}
               onLoad={() => handleImageLoad('QR Code')}
