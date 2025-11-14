@@ -15,10 +15,16 @@ interface ImageCanvasProps {
 export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeImage, showQrCode, onGenerated }: ImageCanvasProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [imagesLoaded, setImagesLoaded] = useState(0);
-  const totalImages = 2; // 背景图 + 二维码
+  // 根据是否显示二维码来决定需要加载的图片数量
+  const totalImages = showQrCode ? 2 : 1; // 背景图 + 二维码（如果显示）
 
   // 使用代理URL来避免CORS问题
   const proxiedBackgroundUrl = `/api/proxy-image?url=${encodeURIComponent(backgroundUrl)}`;
+
+  // 当背景图URL或showQrCode改变时，重置图片加载计数
+  useEffect(() => {
+    setImagesLoaded(0);
+  }, [backgroundUrl, showQrCode]);
 
   useEffect(() => {
     console.log(`Images loaded: ${imagesLoaded}/${totalImages}`);
@@ -30,7 +36,7 @@ export default function ImageCanvas({ backgroundUrl, title, date, text, qrCodeIm
         generateImage();
       }, 1000); // 增加到1秒确保渲染完成
     }
-  }, [backgroundUrl, text, qrCodeImage, imagesLoaded]);
+  }, [backgroundUrl, text, qrCodeImage, imagesLoaded, totalImages]);
 
   const handleImageLoad = (type: string) => {
     console.log(`${type} image loaded`);
